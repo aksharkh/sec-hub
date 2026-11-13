@@ -1,0 +1,226 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─────────────────────────────────────────────────────────────
+   SecureKnots product tokens (shared by Workspace and Trust).
+   Warm neutral canvas, ink text, one cobalt accent. Status colors
+   carry state only and always ship with a label.
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --canvas: #f4f3ef;
+  --surface: #ffffff;
+  --raised: #fbfaf8;
+  --subtle: #f3f1ec;
+  --subtle-2: #ebe8e1;
+  --line: rgb(15 23 41 / 0.08);
+  --line-strong: rgb(15 23 41 / 0.14);
+  --ink: #0f1729;
+  --ink-2: #353e51;
+  --muted: #687082;
+  --faint: #9aa1ad;
+  --brand: #1f3fae;
+  --brand-hover: #1a3696;
+  --brand-soft: #eaeefd;
+  --brand-ink: #1a3696;
+  --on-brand: #ffffff;
+  --ring: rgb(31 63 174 / 0.32);
+
+  --ok: #0f7a4f;
+  --ok-soft: #e5f5ec;
+  --warn: #a05800;
+  --warn-soft: #fcf0dc;
+  --bad: #b42339;
+  --bad-soft: #fcebee;
+  --rev: #6a3fd4;
+  --rev-soft: #f0ebfd;
+  --info: #0b69a6;
+  --info-soft: #e4f2fb;
+  --neutral: #5b6475;
+  --neutral-soft: #eef0f3;
+  --ok-dot: #1f9d63;
+  --warn-dot: #e3982a;
+  --bad-dot: #dc4a5f;
+  --rev-dot: #7d57e6;
+  --info-dot: #2b8fd6;
+  --neutral-dot: #a7aebb;
+
+  --shadow-xs: 0 1px 0 rgb(15 23 41 / 0.03), 0 1px 2px rgb(15 23 41 / 0.05);
+  --shadow-sm: 0 1px 2px rgb(15 23 41 / 0.05), 0 2px 6px -2px rgb(15 23 41 / 0.06);
+  --shadow-pop: 0 16px 40px -12px rgb(15 23 41 / 0.22), 0 4px 12px -4px rgb(15 23 41 / 0.08), 0 0 0 1px rgb(15 23 41 / 0.06);
+  --shadow-panel: 0 1px 2px rgb(15 23 41 / 0.04), 0 8px 24px -12px rgb(15 23 41 / 0.1);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark {
+  /* Monochrome dark: near-black surfaces, white accent, gray text. Status colors keep their hue. */
+  --canvas: #0a0a0a;
+  --surface: #111111;
+  --raised: #161616;
+  --subtle: #1a1a1a;
+  --subtle-2: #262626;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.14);
+  --ink: #ededed;
+  --ink-2: #c9c9c9;
+  --muted: #a1a1a1;
+  --faint: #6e6e6e;
+  --brand: #fafafa;
+  --brand-hover: #e5e5e5;
+  --brand-soft: rgb(255 255 255 / 0.08);
+  --brand-ink: #f5f5f5;
+  --on-brand: #0a0a0a;
+  --ring: rgb(255 255 255 / 0.28);
+
+  --ok: #4ade80;
+  --ok-soft: rgb(74 222 128 / 0.1);
+  --warn: #fbbf24;
+  --warn-soft: rgb(251 191 36 / 0.1);
+  --bad: #f87171;
+  --bad-soft: rgb(248 113 113 / 0.1);
+  --rev: #c4b5fd;
+  --rev-soft: rgb(196 181 253 / 0.1);
+  --info: #7dd3fc;
+  --info-soft: rgb(125 211 252 / 0.1);
+  --neutral: #a3a3a3;
+  --neutral-soft: rgb(255 255 255 / 0.06);
+  --ok-dot: #34c27a;
+  --warn-dot: #e3a52f;
+  --bad-dot: #e8636f;
+  --rev-dot: #a78bfa;
+  --info-dot: #5aaee8;
+  --neutral-dot: #525252;
+
+  --shadow-xs: 0 1px 0 rgb(0 0 0 / 0.4);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5), 0 2px 8px -2px rgb(0 0 0 / 0.5);
+  --shadow-pop: 0 20px 48px -12px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(255 255 255 / 0.09);
+  --shadow-panel: 0 0 0 1px rgb(255 255 255 / 0.06), 0 12px 32px -16px rgb(0 0 0 / 0.9);
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-subtle: var(--subtle);
+  --color-subtle-2: var(--subtle-2);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-ink: var(--brand-ink);
+  --color-on-brand: var(--on-brand);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-rev: var(--rev);
+  --color-rev-soft: var(--rev-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-neutral: var(--neutral);
+  --color-neutral-soft: var(--neutral-soft);
+  --color-ok-dot: var(--ok-dot);
+  --color-warn-dot: var(--warn-dot);
+  --color-bad-dot: var(--bad-dot);
+  --color-rev-dot: var(--rev-dot);
+  --color-info-dot: var(--info-dot);
+  --color-neutral-dot: var(--neutral-dot);
+
+  --font-sans: var(--font-geist);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument);
+
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-pop: var(--shadow-pop);
+  --shadow-panel: var(--shadow-panel);
+
+  --ease-out-expo: var(--ease-out);
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes overlay-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(8px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes dialog-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(4px) scale(0.98); } }
+@keyframes sheet-in { from { transform: translateX(calc(100% + 16px)); } to { transform: none; } }
+@keyframes sheet-out { from { transform: none; } to { transform: translateX(calc(100% + 16px)); } }
+@keyframes sheet-left-in { from { transform: translateX(calc(-100% - 16px)); } to { transform: none; } }
+@keyframes sheet-left-out { from { transform: none; } to { transform: translateX(calc(-100% - 16px)); } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(-4px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes pop-out { from { opacity: 1; } to { opacity: 0; transform: scale(0.98); } }
+
+.anim-overlay[data-state="open"] { animation: overlay-in 0.2s var(--ease-out); }
+.anim-overlay[data-state="closed"] { animation: overlay-out 0.15s ease-in; }
+.anim-dialog[data-state="open"] { animation: dialog-in 0.28s var(--ease-out); }
+.anim-dialog[data-state="closed"] { animation: dialog-out 0.15s ease-in; }
+.anim-sheet[data-state="open"] { animation: sheet-in 0.42s var(--ease-out); }
+.anim-sheet[data-state="closed"] { animation: sheet-out 0.22s ease-in; }
+.anim-sheet-left[data-state="open"] { animation: sheet-left-in 0.38s var(--ease-out); }
+.anim-sheet-left[data-state="closed"] { animation: sheet-left-out 0.2s ease-in; }
+.anim-pop { transform-origin: var(--radix-popper-transform-origin, top); }
+.anim-pop[data-state="open"], .anim-pop[data-state="delayed-open"], .anim-pop[data-state="instant-open"] { animation: pop-in 0.18s var(--ease-out); }
+.anim-pop[data-state="closed"] { animation: pop-out 0.12s ease-in; }
+
+/* ───────── Base ───────── */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  color-scheme: light;
+}
+html.dark { color-scheme: dark; }
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection { background: var(--brand-soft); color: var(--brand-ink); }
+
+* { scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+.tnum { font-variant-numeric: tabular-nums; }
+.serif { font-family: var(--font-instrument), Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
+
+.skeleton {
+  background: linear-gradient(90deg, var(--subtle) 0%, var(--subtle-2) 50%, var(--subtle) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+.fade-up { animation: fade-up 0.34s var(--ease-out) both; }
+
+/* Dot grid used on brand panels and empty states */
+.dot-grid {
+  background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
