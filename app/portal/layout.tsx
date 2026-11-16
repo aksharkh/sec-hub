@@ -19,7 +19,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
 
   return (
     <div className="min-h-dvh bg-canvas">
-      <div className="flex items-center justify-center gap-3 bg-ink px-4 py-2 text-[12.5px] text-surface">
+      <div className="flex items-center justify-center gap-3 bg-ink px-4 py-2 text-[12.5px] text-inverse">
         <span className="truncate">
           You are viewing the client dashboard as <b className="font-semibold">{client?.contacts[0].name ?? "client"}</b>{client ? `, ${client.name}` : ""}. Internal notes and other clients are hidden.
         </span>

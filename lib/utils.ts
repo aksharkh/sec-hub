@@ -54,6 +54,9 @@ export function initials(name: string) {
     .toUpperCase();
 }
 
+/** ISO date n days from now. */
+export const inDays = (n: number) => new Date(Date.now() + n * 864e5).toISOString();
+
 export function uid(prefix = "id") {
   return `${prefix}_${Math.random().toString(36).slice(2, 9)}`;
 }

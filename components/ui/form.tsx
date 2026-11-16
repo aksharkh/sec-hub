@@ -10,18 +10,18 @@ const field =
   "w-full rounded-lg border border-line-strong bg-surface text-[13.5px] text-ink shadow-xs outline-none transition-[border-color,box-shadow] placeholder:text-faint hover:border-[color-mix(in_oklab,var(--line-strong),var(--ink)_10%)] focus:border-brand focus:shadow-[0_0_0_3px_var(--ring)]";
 
 export function Input({ className, ...p }: ComponentProps<"input">) {
-  return <input className={cn(field, "h-9 px-3", className)} {...p} />;
+  return <input data-slot="input" className={cn(field, "h-9 px-3", className)} {...p} />;
 }
 
 export function Textarea({ className, ...p }: ComponentProps<"textarea">) {
-  return <textarea className={cn(field, "min-h-[84px] resize-none px-3 py-2 leading-5", className)} {...p} />;
+  return <textarea data-slot="input" className={cn(field, "min-h-[84px] resize-none px-3 py-2 leading-5", className)} {...p} />;
 }
 
 export function SearchInput({ className, ...p }: ComponentProps<"input">) {
   return (
     <div className={cn("relative", className)}>
       <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-faint" />
-      <input className={cn(field, "h-8 pl-8 pr-3 text-[13px]")} {...p} />
+      <input data-slot="input" className={cn(field, "h-8 pl-8 pr-3 text-[13px]")} {...p} />
     </div>
   );
 }
@@ -114,7 +114,7 @@ export function Segmented<T extends string>({ value, onChange, options, size = "
   const id = useId();
   return (
     <LayoutGroup id={id}>
-      <div role="tablist" className={cn("inline-flex items-center rounded-[10px] bg-subtle p-[3px] shadow-[inset_0_0_0_1px_var(--line)]", className)}>
+      <div role="tablist" data-slot="segmented" className={cn("inline-flex items-center rounded-[10px] bg-subtle p-[3px] shadow-[inset_0_0_0_1px_var(--line)]", className)}>
         {options.map((o) => {
           const active = o.value === value;
           return (
@@ -123,6 +123,7 @@ export function Segmented<T extends string>({ value, onChange, options, size = "
               role="tab"
               aria-selected={active}
               onClick={() => onChange(o.value)}
+              data-slot="seg-item"
               className={cn(
                 "relative flex items-center gap-1.5 rounded-[7px] font-medium transition-colors [&_svg]:size-3.5",
                 size === "sm" ? "h-7 px-2.5 text-[12.5px]" : "h-6 px-2 text-[12px]",
@@ -131,7 +132,7 @@ export function Segmented<T extends string>({ value, onChange, options, size = "
             >
               {active && (
                 <motion.span
-                  layoutId="seg"
+                  layoutId="seg" data-slot="seg-thumb"
                   transition={{ type: "spring", bounce: 0.15, duration: 0.35 }}
                   className="absolute inset-0 rounded-[7px] bg-surface shadow-[0_1px_2px_rgb(15_23_41/0.08),0_0_0_1px_var(--line)]"
                 />
@@ -153,7 +154,7 @@ export function Tabs<T extends string>({ value, onChange, tabs, className }: { v
   const id = useId();
   return (
     <LayoutGroup id={id}>
-      <div role="tablist" className={cn("no-scrollbar flex items-center gap-5 overflow-x-auto border-b border-line", className)}>
+      <div role="tablist" data-slot="tabs" className={cn("no-scrollbar flex items-center gap-5 overflow-x-auto border-b border-line", className)}>
         {tabs.map((t) => {
           const active = t.value === value;
           return (
@@ -162,13 +163,14 @@ export function Tabs<T extends string>({ value, onChange, tabs, className }: { v
               role="tab"
               aria-selected={active}
               onClick={() => onChange(t.value)}
+              data-slot="tab"
               className={cn("relative flex h-10 shrink-0 items-center gap-1.5 whitespace-nowrap text-[13px] font-medium transition-colors", active ? "text-ink" : "text-muted hover:text-ink")}
             >
               {t.label}
               {t.count !== undefined && (
-                <span className={cn("tnum rounded-full px-1.5 text-[11px] leading-[18px]", active ? "bg-ink text-surface" : "bg-subtle-2 text-muted")}>{t.count}</span>
+                <span className={cn("tnum rounded-full px-1.5 text-[11px] leading-[18px]", active ? "bg-ink text-inverse" : "bg-subtle-2 text-muted")}>{t.count}</span>
               )}
-              {active && <motion.span layoutId="tab-line" transition={{ type: "spring", bounce: 0.12, duration: 0.4 }} className="absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-ink" />}
+              {active && <motion.span layoutId="tab-line" data-slot="tab-line" transition={{ type: "spring", bounce: 0.12, duration: 0.4 }} className="absolute inset-x-0 bottom-0 h-[2px] rounded-full bg-ink" />}
             </button>
           );
         })}

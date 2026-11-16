@@ -1,32 +1,37 @@
 "use client";
 
 import { Assistant } from "@/components/assistant/Assistant";
+import { SmartDrop } from "@/components/ai/SmartDrop";
 import { NewClientWizard } from "@/components/clients/NewClientWizard";
 import { CommandPalette } from "@/components/shell/CommandPalette";
-import { SidebarBody } from "@/components/shell/Sidebar";
-import { ShortcutsDialog, Topbar } from "@/components/shell/Topbar";
-import { useStore } from "@/lib/store";
-import { cn } from "@/lib/utils";
+import { AuroraShell, BoardroomShell, BrutalShell, MeridianShell, MonoShell, NocturneShell, SpatialShell } from "@/components/shell/shells";
+import { ShortcutsDialog } from "@/components/shell/Topbar";
+import { useDesign } from "@/lib/useDesign";
 
+const SHELLS = {
+  meridian: MeridianShell,
+  mono: MonoShell,
+  boardroom: BoardroomShell,
+  aurora: AuroraShell,
+  brutal: BrutalShell,
+  spatial: SpatialShell,
+  nocturne: NocturneShell,
+} as const;
+
+/** Each design has its own app frame: navigation, header and page chrome. Pages are shared. */
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const collapsed = useStore((s) => s.sidebarCollapsed);
+  const design = useDesign();
+  const Shell = SHELLS[design.id];
   return (
-    <div className="flex h-dvh overflow-hidden">
-      <aside className={cn("hidden shrink-0 transition-[width] duration-300 ease-out-expo lg:block", collapsed ? "w-[60px]" : "w-[248px]")}>
-        <SidebarBody collapsed={collapsed} />
-      </aside>
-      <div className="flex min-w-0 flex-1 flex-col lg:py-2 lg:pr-2">
-        <main id="main" className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-surface lg:rounded-xl lg:border lg:border-line lg:shadow-panel">
-          <Topbar />
-          <div id="scroll" className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-            {children}
-          </div>
-        </main>
+    <>
+      <div data-shell={design.id} className="contents">
+        <Shell>{children}</Shell>
       </div>
       <CommandPalette />
       <ShortcutsDialog />
       <NewClientWizard />
       <Assistant />
-    </div>
+      <SmartDrop />
+    </>
   );
 }

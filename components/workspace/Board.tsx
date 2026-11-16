@@ -18,6 +18,8 @@ function Card({ c, onOpen, overlay, dragging }: { c: Control; onOpen?: () => voi
   const owner = person(c.ownerId);
   return (
     <div
+      data-slot="kanban-card"
+      data-status={c.status}
       onClick={onOpen}
       className={cn(
         "group cursor-pointer rounded-xl border border-line bg-surface p-3 shadow-xs transition-[border-color,box-shadow,opacity] hover:border-line-strong hover:shadow-sm",
@@ -67,6 +69,7 @@ function Column({ status, items, onOpen }: { status: ControlStatus; items: Contr
       </div>
       <div
         ref={setNodeRef}
+        data-slot="kanban-col"
         className={cn(
           "flex min-h-[120px] flex-1 flex-col gap-2 rounded-2xl p-1.5 transition-colors duration-200",
           isOver ? "bg-brand-soft shadow-[inset_0_0_0_1.5px_var(--brand)]" : "bg-subtle/70",

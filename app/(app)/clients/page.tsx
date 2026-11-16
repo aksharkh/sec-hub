@@ -14,6 +14,7 @@ import { StagePill } from "@/components/ui/stage";
 import { useReady } from "@/lib/hooks";
 import { progressOf, usePerson, useStore } from "@/lib/store";
 import { cn, dayLabel, daysUntil } from "@/lib/utils";
+import { useDesign } from "@/lib/useDesign";
 
 export default function ClientsPage() {
   const ready = useReady();
@@ -21,7 +22,9 @@ export default function ClientsPage() {
   const engagements = useStore((s) => s.engagements);
   const controls = useStore((s) => s.controls);
   const person = usePerson();
-  const [view, setView] = useState<"grid" | "table">("grid");
+  const design = useDesign();
+  const [picked, setView] = useState<"grid" | "table" | null>(null);
+  const view = picked ?? (design.id === "boardroom" || design.id === "nocturne" ? "table" : "grid");
   const [filter, setFilter] = useState<"all" | "active" | "certified">("all");
   const [q, setQ] = useState("");
 

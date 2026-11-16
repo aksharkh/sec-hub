@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Fragment, useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
-import { Bell, CheckCheck, ChevronRight, Menu as MenuIcon, Moon, Search, Sparkles, Sun, Upload, Inbox, MessageSquare, CircleCheck } from "lucide-react";
+import { Bell, CheckCheck, ChevronRight, Menu as MenuIcon, Moon, Search, Sparkles, Sun, Upload, Inbox, MessageSquare, CircleCheck, Wand2 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { ClientMark } from "@/components/ui/avatar";
 import { Kbd } from "@/components/ui/badge";
@@ -14,16 +14,19 @@ import { useStore } from "@/lib/store";
 import type { FrameworkKey } from "@/lib/types";
 import { ago, cn } from "@/lib/utils";
 import { openCommand } from "./CommandPalette";
+import { DesignSwitcher } from "@/components/design/DesignSwitcher";
+import { openSmartUpload } from "@/components/ai/SmartDrop";
+import { useDesign } from "@/lib/useDesign";
 import { openAssistant } from "@/components/assistant/Assistant";
 import { SidebarBody } from "./Sidebar";
 
 const LABELS: Record<string, string> = {
   clients: "Clients", reviews: "Reviews", evidence: "Evidence", gaps: "Gaps", mapping: "Control mapping",
   team: "Team", roles: "Roles & permissions", settings: "Settings", calendar: "Calendar", audits: "Audits", policies: "Policies",
-  risks: "Risks", reports: "Reports", automations: "Automations", integrations: "Integrations", "audit-log": "Audit log",
+  risks: "Risks", questionnaires: "Questionnaires", reports: "Reports", automations: "Automations", integrations: "Integrations", "audit-log": "Audit log",
 };
 
-function Breadcrumbs() {
+export function Breadcrumbs() {
   const pathname = usePathname();
   const clients = useStore((s) => s.clients);
   const policies = useStore((s) => s.policies);
@@ -75,7 +78,7 @@ const noop = () => () => {};
 
 const N_ICON = { approve: CircleCheck, upload: Upload, comment: MessageSquare, revise: Inbox, status: Inbox, gap: Inbox, publish: Inbox, assign: Inbox };
 
-function Notifications() {
+export function Notifications() {
   const items = useStore((s) => s.notifications);
   const read = useStore((s) => s.readNotifications);
   const router = useRouter();
@@ -125,47 +128,75 @@ function Notifications() {
   );
 }
 
-function ThemeToggle() {
+export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(noop, () => true, () => false);
   const dark = mounted && resolvedTheme === "dark";
+  const design = useDesign();
+  const fixed = design.scheme !== "both";
   return (
-    <Tip content={dark ? "Light theme" : "Dark theme"} kbd="Ctrl J">
-      <Button variant="ghost" size="icon" onClick={() => setTheme(dark ? "light" : "dark")} aria-label="Toggle theme">
+    <Tip content={fixed ? `${design.name} is ${design.scheme}-only` : dark ? "Light theme" : "Dark theme"} kbd={fixed ? undefined : "Ctrl J"}>
+      <Button variant="ghost" size="icon" disabled={fixed} className="disabled:opacity-35" onClick={() => setTheme(dark ? "light" : "dark")} aria-label="Toggle theme">
         {dark ? <Sun /> : <Moon />}
       </Button>
     </Tip>
   );
 }
 
-export function Topbar() {
+/** Hamburger + slide-in navigation for small screens (every shell uses it). */
+export function MobileNav({ className }: { className?: string }) {
   const [navOpen, setNavOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-30 flex h-[52px] shrink-0 items-center gap-2 border-b border-line bg-surface/85 px-3 backdrop-blur-xl md:px-4">
-      <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setNavOpen(true)} aria-label="Open navigation">
+    <>
+      <Button variant="ghost" size="icon" className={cn("lg:hidden", className)} onClick={() => setNavOpen(true)} aria-label="Open navigation">
         <MenuIcon />
       </Button>
       <Sheet open={navOpen} onOpenChange={setNavOpen} title="Navigation" side="left" className="bg-canvas">
         <SidebarBody onNavigate={() => setNavOpen(false)} />
       </Sheet>
-      <div className="min-w-0 flex-1">
-        <Breadcrumbs />
-      </div>
+    </>
+  );
+}
+
+/** Ask, Smart upload, Design, notifications and theme: the same actions in every shell. */
+export function TopActions({ compact = false, demo = true }: { compact?: boolean; demo?: boolean }) {
+  return (
+    <>
+      {demo && (
+        <span className="hidden items-center gap-1.5 rounded-full border border-dashed border-line-strong px-2 py-0.5 text-[11px] font-medium text-faint xl:flex">
+          <span className="size-1.5 rounded-full bg-warn" />
+          Demo data
+        </span>
+      )}
       <Button variant="ghost" size="icon" className="md:hidden" onClick={openCommand} aria-label="Search">
         <Search />
       </Button>
-      <span className="hidden items-center gap-1.5 rounded-full border border-dashed border-line-strong px-2 py-0.5 text-[11px] font-medium text-faint xl:flex">
-        <span className="size-1.5 rounded-full bg-warn" />
-        Demo data
-      </span>
-      <Button variant="secondary" size="sm" onClick={openAssistant} className="hidden gap-1.5 sm:inline-flex">
-        <Sparkles className="!size-3.5" />
-        Ask
-        <Kbd className="ml-0.5">Ctrl /</Kbd>
-      </Button>
-      <Button variant="ghost" size="icon" onClick={openAssistant} className="sm:hidden" aria-label="Ask the assistant"><Sparkles /></Button>
+      {!compact && (
+        <Button variant="secondary" size="sm" onClick={openAssistant} className="hidden gap-1.5 sm:inline-flex">
+          <Sparkles className="!size-3.5" />
+          Ask
+          <Kbd className="ml-0.5">Ctrl /</Kbd>
+        </Button>
+      )}
+      <Button variant="ghost" size="icon" onClick={openAssistant} className={cn(!compact && "sm:hidden")} aria-label="Ask the assistant"><Sparkles /></Button>
+      <Tip content="Smart upload: drop files anywhere and they are filed automatically">
+        <Button variant="ghost" size="icon" onClick={openSmartUpload} aria-label="Smart upload"><Wand2 /></Button>
+      </Tip>
+      <DesignSwitcher />
       <Notifications />
       <ThemeToggle />
+    </>
+  );
+}
+
+export function Topbar() {
+  return (
+    <header className="sticky top-0 z-30 flex h-[52px] shrink-0 items-center gap-2 border-b border-line bg-surface/85 px-3 backdrop-blur-xl md:px-4">
+      <MobileNav />
+      <div className="min-w-0 flex-1">
+        <Breadcrumbs />
+      </div>
+      <TopActions />
     </header>
   );
 }

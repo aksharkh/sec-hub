@@ -74,7 +74,7 @@ export function NewClientWizard() {
             <div className="flex items-center gap-2 border-b border-line px-5 py-3">
               {STEPS.map((s, i) => (
                 <div key={s} className="flex flex-1 items-center gap-2">
-                  <span className={cn("grid size-5 shrink-0 place-items-center rounded-full text-[10.5px] font-semibold transition-colors", i < step ? "bg-ok text-surface" : i === step ? "bg-ink text-surface" : "bg-subtle-2 text-muted")}>
+                  <span className={cn("grid size-5 shrink-0 place-items-center rounded-full text-[10.5px] font-semibold transition-colors", i < step ? "bg-ok text-inverse" : i === step ? "bg-ink text-inverse" : "bg-subtle-2 text-muted")}>
                     {i < step ? <Check className="size-3" strokeWidth={3} /> : i + 1}
                   </span>
                   <span className={cn("hidden truncate text-[12.5px] font-medium sm:block", i === step ? "text-ink" : "text-muted")}>{s}</span>
@@ -151,7 +151,7 @@ export function NewClientWizard() {
                               <button key={m.id} onClick={() => { const n = new Set(f.team); if (on) n.delete(m.id); else n.add(m.id); set("team", n); }} className={cn("flex items-center gap-3 rounded-xl border p-2.5 text-left transition-colors", on ? "border-ink bg-raised" : "border-line hover:border-line-strong")}>
                                 <Avatar person={m} size="md" />
                                 <span className="min-w-0 flex-1"><span className="block text-[13px] font-medium text-ink">{m.name}</span><span className="block text-[12px] text-muted">{m.title} · {m.location}</span></span>
-                                <span className={cn("grid size-4 place-items-center rounded-[5px] border", on ? "border-ink bg-ink text-surface" : "border-line-strong")}>{on && <Check className="size-3" strokeWidth={3} />}</span>
+                                <span className={cn("grid size-4 place-items-center rounded-[5px] border", on ? "border-ink bg-ink text-inverse" : "border-line-strong")}>{on && <Check className="size-3" strokeWidth={3} />}</span>
                               </button>
                             );
                           })}

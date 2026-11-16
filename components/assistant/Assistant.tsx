@@ -148,7 +148,7 @@ export function Assistant() {
     <Sheet open={open} onOpenChange={setOpen} title="Assistant" className="w-[min(480px,calc(100vw-16px))]">
       <div className="flex h-full flex-col">
         <div className="flex items-center gap-2 border-b border-line px-4 py-3">
-          <span className="grid size-7 place-items-center rounded-lg bg-ink text-surface"><Sparkles className="size-3.5" /></span>
+          <span className="grid size-7 place-items-center rounded-lg bg-ink text-inverse"><Sparkles className="size-3.5" /></span>
           <p className="text-[14px] font-semibold text-ink">Assistant</p>
           <Badge tone="neutral" dot={false}>Preview</Badge>
           <span className="ml-auto hidden items-center gap-1 text-[11.5px] text-faint sm:flex"><Kbd>Ctrl</Kbd><Kbd>/</Kbd></span>
@@ -174,7 +174,7 @@ export function Assistant() {
               <AnimatePresence initial={false}>
                 {msgs.map((m) =>
                   m.role === "user" ? (
-                    <motion.div key={m.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="ml-10 rounded-2xl rounded-br-md bg-ink px-3.5 py-2.5 text-[13.5px] leading-5 text-surface">
+                    <motion.div key={m.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="ml-10 rounded-2xl rounded-br-md bg-ink px-3.5 py-2.5 text-[13.5px] leading-5 text-inverse">
                       {m.text}
                     </motion.div>
                   ) : (

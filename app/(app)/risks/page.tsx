@@ -29,7 +29,7 @@ function Scale({ value, onChange, labels }: { value: number; onChange: (n: numbe
   return (
     <div className="grid grid-cols-5 gap-1">
       {labels.map((l, i) => (
-        <button key={l} onClick={() => onChange(i + 1)} className={cn("rounded-lg border px-1 py-1.5 text-center text-[11px] font-medium transition-colors", value === i + 1 ? "border-ink bg-ink text-surface" : "border-line text-muted hover:border-line-strong hover:text-ink")}>
+        <button key={l} onClick={() => onChange(i + 1)} className={cn("rounded-lg border px-1 py-1.5 text-center text-[11px] font-medium transition-colors", value === i + 1 ? "border-ink bg-ink text-inverse" : "border-line text-muted hover:border-line-strong hover:text-ink")}>
           <span className="tnum block text-[13px]">{i + 1}</span>{l}
         </button>
       ))}

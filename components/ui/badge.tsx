@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export function Badge({ tone = "neutral", dot = true, children, className }: { tone?: Tone; dot?: boolean; children: ReactNode; className?: string }) {
   const t = TONE_CLASS[tone];
   return (
-    <span className={cn("inline-flex h-[22px] shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] font-medium", t.soft, t.fg, className)}>
+    <span data-slot="badge" className={cn("inline-flex h-[22px] shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-2 text-[12px] font-medium", t.soft, t.fg, className)}>
       {dot && <span className={cn("size-1.5 rounded-full", t.dot)} />}
       {children}
     </span>
@@ -36,13 +36,13 @@ const STATUS_GLYPH: Record<ControlStatus, (cls: string) => ReactNode> = {
   revise: (c) => (
     <>
       <circle cx="7" cy="7" r="5.25" className={c} fill="currentColor" stroke="none" />
-      <path d="M7 4.3v3.2M7 9.4v.1" style={{ stroke: "var(--surface)" }} strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M7 4.3v3.2M7 9.4v.1" style={{ stroke: "var(--inverse)" }} strokeWidth="1.5" strokeLinecap="round" />
     </>
   ),
   approved: (c) => (
     <>
       <circle cx="7" cy="7" r="5.75" className={c} fill="currentColor" stroke="none" />
-      <path d="m4.6 7.1 1.6 1.6 3.2-3.3" style={{ stroke: "var(--surface)" }} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="m4.6 7.1 1.6 1.6 3.2-3.3" style={{ stroke: "var(--inverse)" }} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
     </>
   ),
 };
@@ -61,7 +61,7 @@ export function StatusBadge({ status, className }: { status: ControlStatus; clas
   const s = STATUS[status];
   const t = TONE_CLASS[s.tone];
   return (
-    <span className={cn("inline-flex h-[22px] shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full pl-1.5 pr-2 text-[12px] font-medium", t.soft, t.fg, className)}>
+    <span data-slot="badge" className={cn("inline-flex h-[22px] shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full pl-1.5 pr-2 text-[12px] font-medium", t.soft, t.fg, className)}>
       <StatusIcon status={status} />
       {s.label}
     </span>
@@ -73,7 +73,7 @@ export function SeverityBadge({ severity }: { severity: Severity }) {
   const t = TONE_CLASS[s.tone];
   const bars = 4 - s.rank;
   return (
-    <span className={cn("inline-flex h-[22px] items-center gap-1.5 rounded-full px-2 text-[12px] font-medium", t.soft, t.fg)}>
+    <span data-slot="badge" className={cn("inline-flex h-[22px] items-center gap-1.5 rounded-full px-2 text-[12px] font-medium", t.soft, t.fg)}>
       <span className="flex items-end gap-[2px]" aria-hidden>
         {[0, 1, 2, 3].map((i) => (
           <span key={i} className={cn("w-[3px] rounded-[1px]", i < bars ? t.dot : "bg-current opacity-20")} style={{ height: 4 + i * 2 }} />
@@ -93,7 +93,7 @@ export function GapStatusBadge({ status }: { status: GapStatus }) {
 export function FrameworkChip({ fw, className, size = "md" }: { fw: FrameworkKey; className?: string; size?: "sm" | "md" }) {
   const f = FRAMEWORKS[fw];
   return (
-    <span
+    <span data-slot="chip"
       className={cn(
         "inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-surface font-medium text-ink-2",
         size === "sm" ? "h-5 px-1.5 text-[11px]" : "h-[22px] px-2 text-[12px]",

@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import { NAV_GROUPS, TRUST_URL } from "./nav";
 import { openCommand } from "./CommandPalette";
 
-function useCounts() {
+export function useCounts() {
   const controls = useStore((s) => s.controls);
   const gaps = useStore((s) => s.gaps);
   const audits = useStore((s) => s.audits);
@@ -102,6 +102,7 @@ export function SidebarBody({ collapsed = false, onNavigate }: { collapsed?: boo
                           active={n.href === "/team" ? activeExact(n.href) : active(n.href)}
                           collapsed={collapsed}
                           count={ready && n.count ? counts[n.count] : undefined}
+                          badge={n.badge}
                           onNavigate={onNavigate}
                         />
                       </li>
@@ -160,7 +161,7 @@ export function SidebarBody({ collapsed = false, onNavigate }: { collapsed?: boo
   );
 }
 
-function NavLink({ href, icon, label, active, collapsed, count, onNavigate }: { href: string; icon: React.ReactNode; label: string; active: boolean; collapsed: boolean; count?: number; onNavigate?: () => void }) {
+function NavLink({ href, icon, label, active, collapsed, count, badge, onNavigate }: { href: string; icon: React.ReactNode; label: string; active: boolean; collapsed: boolean; count?: number; badge?: string; onNavigate?: () => void }) {
   const link = (
     <Link
       href={href}
@@ -174,6 +175,7 @@ function NavLink({ href, icon, label, active, collapsed, count, onNavigate }: { 
       {icon}
       {!collapsed && <span className="flex-1 truncate">{label}</span>}
       {!collapsed && count !== undefined && count > 0 && <span className="tnum text-[11.5px] font-medium text-faint">{count}</span>}
+      {!collapsed && badge && <span className="rounded-full bg-brand px-1.5 text-[10px] font-semibold leading-4 text-on-brand">{badge}</span>}
       {collapsed && count !== undefined && count > 0 && <span className="absolute right-1.5 top-1.5 size-1.5 rounded-full bg-brand" />}
     </Link>
   );

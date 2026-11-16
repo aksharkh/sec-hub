@@ -29,6 +29,7 @@ type Actions = {
   setEvidenceState: (id: string, state: "accepted" | "pending" | "rejected") => void;
   submitRequest: (requestId: string, files: { name: string; kind: FileKind; sizeKb: number }[]) => void;
   requestEvidence: (controlId: string, title: string, note: string, dueDays: number) => void;
+  fileTo: (controlIds: string[], file: { name: string; kind: FileKind; sizeKb: number }) => void;
   readNotifications: () => void;
   publish: (clientId: string) => void;
   setViewAs: (clientId: string | null) => void;
@@ -211,6 +212,32 @@ export const useStore = create<Store>()(
             requests: [{ id: uid("rq"), clientId: c.clientId, controlId, title, note, due: new Date(Date.now() + dueDays * 864e5).toISOString(), status: "open" }, ...s.requests],
           }));
           if (c.status !== "client") get().setStatus(controlId, "client");
+        },
+
+        fileTo: (controlIds, f) => {
+          const s = get();
+          if (!controlIds.length) return;
+          const first = s.controls[controlIds[0]];
+          // One file, linked to every chosen control and to their twins in the client's other frameworks.
+          const ids = new Set<string>();
+          controlIds.forEach((cid) => {
+            const c = s.controls[cid];
+            if (!c) return;
+            Object.values(s.controls).forEach((x) => { if (x.clientId === c.clientId && x.unifiedId === c.unifiedId) ids.add(x.id); });
+          });
+          const ev = {
+            id: uid("ev"), clientId: first.clientId, name: f.name.replace(/\.[^.]+$/, ""), kind: f.kind, sizeKb: f.sizeKb,
+            uploadedBy: ME, uploadedAt: now(), version: 1, controlIds: [...ids], source: "internal" as const, state: "pending" as const,
+          };
+          set((st) => {
+            const controls = { ...st.controls };
+            ids.forEach((cid) => (controls[cid] = { ...controls[cid], evidenceIds: [...controls[cid].evidenceIds, ev.id] }));
+            return {
+              evidence: { ...st.evidence, [ev.id]: ev },
+              controls,
+              activity: [{ id: uid("a"), at: now(), by: ME, kind: "upload", clientId: first.clientId, controlId: first.id, text: `filed ${f.name} to ${ids.size} controls with Smart filing` }, ...st.activity],
+            };
+          });
         },
 
         readNotifications: () => set((s) => ({ notifications: s.notifications.map((n) => ({ ...n, read: true })) })),

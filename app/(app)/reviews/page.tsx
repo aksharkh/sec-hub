@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Check, RotateCcw } from "lucide-react";
+import { Check, RotateCcw, Sparkles } from "lucide-react";
+import { precheck } from "@/lib/ai";
 import { Avatar, ClientMark } from "@/components/ui/avatar";
 import { Code, Kbd } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,7 @@ function Inbox() {
   const all = useStore((s) => s.controls);
   const clients = useStore((s) => s.clients);
   const engagements = useStore((s) => s.engagements);
+  const evidence = useStore((s) => s.evidence);
   const person = usePerson();
   const search = useQuery();
   const [tabState, setTab] = useState<Tab | null>(null);
@@ -66,7 +68,7 @@ function Inbox() {
   const current = sel ? all[sel] : null;
 
   return (
-    <div className="flex h-[calc(100dvh-52px)] flex-col lg:h-[calc(100dvh-16px-52px-2px)]">
+    <div data-fill className="flex h-full min-h-[560px] flex-col">
       <div className="border-b border-line px-4 pt-5 md:px-6">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
@@ -115,6 +117,7 @@ function Inbox() {
                           <span className="flex items-center gap-2">
                             <Code className="text-[11.5px] text-muted">{c.code}</Code>
                             <span className="truncate text-[12px] text-faint">{client.name} · {FRAMEWORKS[e.framework].short}</span>
+                            {(() => { const r = precheck(c.evidenceIds.map((id) => evidence[id]).filter(Boolean)); return r.total ? <span className={cn("ml-auto flex shrink-0 items-center gap-0.5 rounded-full px-1.5 text-[10.5px] font-semibold leading-[18px]", r.failed.length ? "bg-warn-soft text-warn" : "bg-subtle text-ink-2")}><Sparkles className="size-2.5" />{r.passed}/{r.total}</span> : null; })()}
                           </span>
                           <span className="mt-0.5 block truncate text-[13.5px] font-medium text-ink">{c.title}</span>
                           <span className="mt-1 flex items-center gap-1.5 text-[12px] text-muted">

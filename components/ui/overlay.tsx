@@ -15,7 +15,7 @@ export function Tip({ content, kbd, side = "top", children, asChild = true }: { 
         <T.Content
           side={side}
           sideOffset={6}
-          className="anim-pop z-[90] flex items-center gap-2 rounded-lg bg-ink px-2 py-1 text-[12px] font-medium text-surface shadow-pop dark:bg-subtle-2 dark:text-ink"
+          className="anim-pop z-[90] flex items-center gap-2 rounded-lg bg-ink px-2 py-1 text-[12px] font-medium text-inverse shadow-pop dark:bg-subtle-2 dark:text-ink"
         >
           {content}
           {kbd && <Kbd className="border-white/15 bg-white/10 text-white/80 shadow-none dark:border-line dark:bg-surface dark:text-muted">{kbd}</Kbd>}

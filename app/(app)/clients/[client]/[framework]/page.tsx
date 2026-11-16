@@ -21,8 +21,12 @@ import { setQuery, useQuery, useReady } from "@/lib/hooks";
 import { progressOf, usePerson, useStore } from "@/lib/store";
 import type { ControlStatus, DomainId, FrameworkKey } from "@/lib/types";
 import { cn, dayLabel, daysUntil } from "@/lib/utils";
+import type { DesignId } from "@/lib/designs";
+import { useDesign } from "@/lib/useDesign";
 
 type View = "board" | "table" | "folders";
+/** Each design opens the workspace in the view that suits it; the user can still switch. */
+const DEFAULT_VIEW: Record<DesignId, View> = { meridian: "folders", mono: "board", boardroom: "table", aurora: "board", brutal: "board", spatial: "board", nocturne: "table" };
 
 function Loading() {
   return (
@@ -58,7 +62,9 @@ function Workspace() {
   const members = useStore((s) => s.members);
   const person = usePerson();
 
-  const [view, setView] = useState<View>("board");
+  const design = useDesign();
+  const [picked, setView] = useState<View | null>(null);
+  const view = picked ?? DEFAULT_VIEW[design.id];
   const [q, setQ] = useState("");
   const [statuses, setStatuses] = useState<Set<ControlStatus>>(new Set());
   const [owners, setOwners] = useState<Set<string>>(new Set());
@@ -114,6 +120,11 @@ function Workspace() {
               <span>{engagement.auditor}</span>
               <Dot />
               <AvatarStack people={client.team.map(person)} size="xs" />
+              <Dot />
+              <span className="flex items-center gap-1.5 text-ok">
+                <span className="relative flex size-2"><span className="absolute inset-0 animate-ping rounded-full bg-ok-dot/60" /><span className="relative size-2 rounded-full bg-ok-dot" /></span>
+                {person(client.team[client.team.length > 1 ? 1 : 0]).name.split(" ")[0]} is here now
+              </span>
             </p>
           </div>
         </div>
@@ -151,11 +162,11 @@ function Workspace() {
               <Link
                 key={e.id}
                 href={`/clients/${client.id}/${e.framework}`}
-                className={cn("flex h-8 items-center gap-2 rounded-lg border px-2.5 text-[12.5px] font-medium transition-colors", on ? "border-ink bg-ink text-surface" : "border-line text-ink-2 hover:border-line-strong hover:bg-subtle")}
+                className={cn("flex h-8 items-center gap-2 rounded-lg border px-2.5 text-[12.5px] font-medium transition-colors", on ? "border-ink bg-ink text-inverse" : "border-line text-ink-2 hover:border-line-strong hover:bg-subtle")}
               >
                 <span className="size-1.5 rounded-full" style={{ background: `hsl(${FRAMEWORKS[e.framework].hue} 62% 58%)` }} />
                 {FRAMEWORKS[e.framework].short}
-                <span className={cn("tnum", on ? "text-surface/60" : "text-faint")}>{p.pct}%</span>
+                <span className={cn("tnum", on ? "text-inverse/60" : "text-faint")}>{p.pct}%</span>
               </Link>
             );
           })}

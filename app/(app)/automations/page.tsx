@@ -59,7 +59,7 @@ export default function AutomationsPage() {
                 <motion.div key={a.id} layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>
                   <Card className={cn("p-4 transition-opacity", !a.enabled && "opacity-60")}>
                     <div className="flex items-start gap-3">
-                      <span className={cn("grid size-9 shrink-0 place-items-center rounded-lg", a.enabled ? "bg-ink text-surface" : "bg-subtle text-muted")}><Workflow className="size-4" /></span>
+                      <span className={cn("grid size-9 shrink-0 place-items-center rounded-lg", a.enabled ? "bg-ink text-inverse" : "bg-subtle text-muted")}><Workflow className="size-4" /></span>
                       <div className="min-w-0 flex-1">
                         <p className="text-[14px] font-semibold tracking-[-0.01em] text-ink">{a.name}</p>
                         <p className="text-[12px] text-muted">{a.runs.toLocaleString()} runs{a.lastRun ? ` · last ${ago(a.lastRun)}` : ""}</p>

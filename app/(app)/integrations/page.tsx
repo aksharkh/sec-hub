@@ -54,7 +54,7 @@ function ConnectDialog({ i, onClose }: { i: Integration | null; onClose: () => v
               const state = step > k + 1 || done ? "done" : step === k + 1 ? "doing" : "wait";
               return (
                 <li key={s} className="flex items-center gap-3 text-[13px]">
-                  <span className={cn("grid size-5 place-items-center rounded-full border", state === "done" ? "border-ok bg-ok text-surface" : state === "doing" ? "border-ink" : "border-line-strong")}>
+                  <span className={cn("grid size-5 place-items-center rounded-full border", state === "done" ? "border-ok bg-ok text-inverse" : state === "doing" ? "border-ink" : "border-line-strong")}>
                     {state === "done" ? <Check className="size-3" strokeWidth={3} /> : state === "doing" ? <span className="size-2.5 animate-spin rounded-full border-2 border-ink/20 border-t-ink" /> : null}
                   </span>
                   <span className={state === "wait" ? "text-faint" : "text-ink"}>{s}</span>

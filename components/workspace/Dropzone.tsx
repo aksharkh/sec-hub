@@ -45,6 +45,7 @@ export function Dropzone({ onDone, compact, label = "Drop evidence here or brows
     <div>
       <button
         type="button"
+        data-dropzone
         onClick={() => input.current?.click()}
         onDragOver={(e) => {
           e.preventDefault();

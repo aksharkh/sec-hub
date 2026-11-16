@@ -15,7 +15,7 @@ export const buttonStyles = cva(
         ghost: "text-ink-2 hover:bg-subtle hover:text-ink",
         soft: "bg-brand-soft text-brand-ink hover:bg-brand-soft/70",
         danger: "bg-bad text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.16)] hover:opacity-90 dark:text-canvas",
-        ink: "bg-ink text-surface shadow-[inset_0_1px_0_rgb(255_255_255/0.12)] hover:opacity-90",
+        ink: "bg-ink text-inverse shadow-[inset_0_1px_0_rgb(255_255_255/0.12)] hover:opacity-90",
       },
       size: {
         xs: "h-7 rounded-md px-2.5 text-[12px] [&_svg]:size-3.5",
@@ -34,5 +34,5 @@ type Props = ComponentProps<"button"> & VariantProps<typeof buttonStyles> & { as
 
 export function Button({ className, variant, size, asChild, type, ...props }: Props) {
   const Comp = asChild ? Slot.Root : "button";
-  return <Comp type={asChild ? undefined : (type ?? "button")} className={cn(buttonStyles({ variant, size }), className)} {...props} />;
+  return <Comp data-slot="button" data-variant={variant ?? "secondary"} type={asChild ? undefined : (type ?? "button")} className={cn(buttonStyles({ variant, size }), className)} {...props} />;
 }

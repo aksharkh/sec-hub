@@ -119,7 +119,7 @@ export default function PolicyPage() {
             <ol className="relative px-4 pb-4 before:absolute before:bottom-6 before:left-[27px] before:top-1 before:w-px before:bg-line">
               {p.versions.map((v, i) => (
                 <motion.li key={`${v.v}-${v.at}`} initial={{ opacity: 0, x: -4 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }} className="relative flex gap-3 py-2">
-                  <span className={cn("z-10 mt-0.5 grid size-6 shrink-0 place-items-center rounded-full border", i === 0 ? "border-ink bg-ink text-surface" : "border-line-strong bg-surface text-faint")}>
+                  <span className={cn("z-10 mt-0.5 grid size-6 shrink-0 place-items-center rounded-full border", i === 0 ? "border-ink bg-ink text-inverse" : "border-line-strong bg-surface text-faint")}>
                     {i === 0 ? <Check className="size-3" strokeWidth={3} /> : <GitCommitHorizontal className="size-3" />}
                   </span>
                   <div className="min-w-0 text-[12.5px] leading-5">

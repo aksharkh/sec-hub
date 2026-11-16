@@ -5,6 +5,9 @@ import { notFound, useParams, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { ArrowLeftRight, ArrowRight, CalendarClock, Check, ClipboardCheck, FileText, Gauge, Globe, Mail, MapPin, Rocket } from "lucide-react";
 import { PHASE } from "@/lib/audit";
+import { ForecastCard } from "@/components/charts/Forecast";
+import { toast } from "sonner";
+import { Copy, Inbox } from "lucide-react";
 import { ActivityFeed } from "@/components/home/ActivityFeed";
 import { Avatar, ClientMark } from "@/components/ui/avatar";
 import { Badge, FrameworkChip, GapStatusBadge, SeverityBadge } from "@/components/ui/badge";
@@ -173,6 +176,8 @@ export default function ClientPage() {
             })()}
           </div>
 
+          <ForecastCard client={client} engagements={engs} controls={cs} />
+
           <Card>
             <CardHead title="Open gaps" sub={`${clientGaps.length} findings from gap analysis that still need work`} action={<Button size="xs" variant="ghost" asChild><Link href={`/gaps?client=${client.id}`}>Gap register <ArrowRight /></Link></Button>} />
             {clientGaps.length === 0 ? (
@@ -231,6 +236,18 @@ export default function ClientPage() {
                 </li>
               ))}
             </ul>
+          </Card>
+
+          <Card className="p-4">
+            <p className="flex items-center gap-1.5 text-[13px] font-semibold text-ink"><Inbox className="size-4 text-muted" />Evidence inbox</p>
+            <p className="mt-1 text-[12.5px] leading-5 text-muted">The client forwards evidence by email; attachments are read and filed to the right controls automatically.</p>
+            <button
+              onClick={() => { navigator.clipboard?.writeText(`${client.id}@evidence.secureknots.com`); toast("Address copied"); }}
+              className="mt-2.5 flex w-full items-center justify-between gap-2 rounded-lg border border-dashed border-line-strong bg-raised px-3 py-2 text-left font-mono text-[12px] text-ink transition-colors hover:border-ink"
+            >
+              <span className="truncate">{client.id}@evidence.secureknots.com</span>
+              <Copy className="size-3.5 shrink-0 text-muted" />
+            </button>
           </Card>
 
           <Card>

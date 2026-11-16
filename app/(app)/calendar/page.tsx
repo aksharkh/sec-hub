@@ -18,7 +18,7 @@ import { cn, dayLabel } from "@/lib/utils";
 type Ev = { at: Date; kind: "due" | "meeting" | "policy" | "request" | "target"; title: string; sub: string; href: string; hue?: number };
 
 const KIND = {
-  target: { label: "Target date", icon: CalendarClock, cls: "bg-ink text-surface" },
+  target: { label: "Target date", icon: CalendarClock, cls: "bg-ink text-inverse" },
   meeting: { label: "Auditor meeting", icon: Users, cls: "bg-rev-soft text-rev" },
   request: { label: "Client request due", icon: Inbox, cls: "bg-warn-soft text-warn" },
   due: { label: "Controls due", icon: ClipboardCheck, cls: "bg-info-soft text-info" },
@@ -170,7 +170,7 @@ function Month() {
                 onClick={() => setSel(d)}
                 className={cn("relative min-h-[92px] border-b border-r border-line p-1.5 text-left transition-colors [&:nth-child(7n)]:border-r-0", !isSameMonth(d, cursor) && "bg-raised/60", picked ? "bg-brand-soft/60" : "hover:bg-raised")}
               >
-                <span className={cn("tnum inline-grid size-6 place-items-center rounded-full text-[12px]", isToday(d) ? "bg-ink font-semibold text-surface" : isSameMonth(d, cursor) ? "text-ink" : "text-faint")}>{format(d, "d")}</span>
+                <span className={cn("tnum inline-grid size-6 place-items-center rounded-full text-[12px]", isToday(d) ? "bg-ink font-semibold text-inverse" : isSameMonth(d, cursor) ? "text-ink" : "text-faint")}>{format(d, "d")}</span>
                 <span className="mt-1 block space-y-0.5">
                   {ev.slice(0, 3).map((e, i) => (
                     <span key={i} className={cn("block truncate rounded-[5px] px-1.5 py-px text-[10.5px] font-medium", KIND[e.kind].cls)}>{e.kind === "due" ? e.title : `${e.title}`}</span>

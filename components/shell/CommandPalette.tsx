@@ -3,7 +3,7 @@
 import { Command } from "cmdk";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeftRight, Building2, CornerDownLeft, Moon, RefreshCcw, Search, Sparkles, Sun } from "lucide-react";
+import { ArrowLeftRight, Building2, CornerDownLeft, Moon, RefreshCcw, Search, Sparkles, Sun, Wand2 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { ClientMark } from "@/components/ui/avatar";
@@ -159,6 +159,10 @@ export function CommandPalette() {
                 <Sparkles />
                 <span className="flex-1">Ask the assistant</span>
                 <Kbd>Ctrl /</Kbd>
+              </Command.Item>
+              <Command.Item value="smart upload file evidence auto" onSelect={() => { setOpen(false); window.dispatchEvent(new CustomEvent("sk:smart-upload")); }} className={itemCls}>
+                <Wand2 />
+                <span className="flex-1">Smart upload: file evidence automatically</span>
               </Command.Item>
               <Command.Item value="reset demo data" onSelect={() => { reset(); setOpen(false); toast.success("Demo data reset"); }} className={itemCls}>
                 <RefreshCcw />

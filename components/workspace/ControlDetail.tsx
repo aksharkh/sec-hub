@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { useMemo, useRef, useState, type ReactNode } from "react";
-import { ArrowUpRight, CalendarDays, Check, ChevronDown, Link2, Lock, Paperclip, RotateCcw, Send, ShieldCheck, X, Eye, CircleAlert } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Check, ChevronDown, Link2, Lock, Paperclip, RotateCcw, Send, ShieldCheck, X, Eye, CircleAlert, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, ClientMark } from "@/components/ui/avatar";
 import { Badge, Code, FrameworkChip, StatusBadge, StatusIcon } from "@/components/ui/badge";
@@ -16,6 +16,46 @@ import { usePerson, useStore } from "@/lib/store";
 import type { Control, FrameworkKey } from "@/lib/types";
 import { ago, cn, dateTime, dayLabel, daysUntil, fileSize } from "@/lib/utils";
 import { Dropzone } from "./Dropzone";
+import { checksFor, precheck } from "@/lib/ai";
+import type { Evidence } from "@/lib/types";
+
+function AiChip({ e }: { e: Evidence }) {
+  const cs = checksFor(e);
+  const ok = cs.filter((x) => x.pass).length;
+  return (
+    <Tip content={<span className="block space-y-0.5">{cs.map((x) => <span key={x.label} className="flex items-center gap-1.5">{x.pass ? "✓" : "✕"} {x.label}</span>)}</span>}>
+      <span className={cn("inline-flex h-[22px] items-center gap-1 rounded-full px-1.5 text-[11px] font-semibold", ok === cs.length ? "bg-subtle text-ink-2" : "bg-warn-soft text-warn")}>
+        <Sparkles className="size-3" />{ok}/{cs.length}
+      </span>
+    </Tip>
+  );
+}
+
+function Precheck({ files, clientName, contact, onRequest }: { files: Evidence[]; clientName: string; contact: string; onRequest: (text: string) => void }) {
+  const r = precheck(files);
+  const clean = r.failed.length === 0;
+  return (
+    <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className={cn("mt-2.5 rounded-xl border px-3.5 py-3", clean ? "border-line bg-raised" : "border-warn/30 bg-warn-soft/40")}>
+      <div className="flex items-center gap-2">
+        <span className={cn("grid size-6 place-items-center rounded-md", clean ? "bg-ink text-inverse" : "bg-warn text-white")}><Sparkles className="size-3.5" /></span>
+        <p className="text-[13px] font-semibold text-ink">Automatic pre-check · {r.passed} of {r.total} passed</p>
+        <span className="ml-auto text-[11.5px] text-muted">{clean ? "Ready for QA" : "Likely to be sent back"}</span>
+      </div>
+      {!clean && (
+        <>
+          <ul className="mt-2 space-y-1">
+            {r.failed.slice(0, 3).map((f) => (
+              <li key={f.file.id + f.label} className="flex gap-2 text-[12.5px] leading-5 text-ink-2"><span className="text-warn">✕</span><span><b className="font-medium text-ink">{f.file.name}</b>: {f.note}</span></li>
+            ))}
+          </ul>
+          <Button size="xs" variant="secondary" className="mt-2.5" onClick={() => onRequest(`Hi ${contact.split(" ")[0]}, the pre-check found: ${r.failed.slice(0, 3).map((f) => `${f.file.name}: ${f.note?.toLowerCase()}`).join("; ")}. Could you send updated versions for ${clientName}?`)}>
+            <Send /> Ask the client to fix it
+          </Button>
+        </>
+      )}
+    </motion.div>
+  );
+}
 import { ApproveDialog, SendBackDialog } from "./ReviewDialogs";
 
 export function DueChip({ due, status, className }: { due: string; status?: Control["status"]; className?: string }) {
@@ -48,7 +88,7 @@ function Step({ done, active, label, by, at, last }: { done: boolean; active: bo
         <span
           className={cn(
             "relative z-10 grid size-6 place-items-center rounded-full border text-[11px] font-semibold transition-colors",
-            done ? "border-ok bg-ok text-surface" : active ? "border-brand bg-brand-soft text-brand" : "border-line-strong bg-surface text-faint",
+            done ? "border-ok bg-ok text-inverse" : active ? "border-brand bg-brand-soft text-brand" : "border-line-strong bg-surface text-faint",
           )}
         >
           {done ? <Check className="size-3.5" strokeWidth={3} /> : active ? <span className="size-1.5 animate-pulse rounded-full bg-brand" /> : null}
@@ -148,7 +188,7 @@ export function ControlDetail({ id, onClose }: { id: string; onClose?: () => voi
   const members = useStore((s) => s.members);
   const evidenceMap = useStore((s) => s.evidence);
   const allControls = useStore((s) => s.controls);
-  const { setStatus, assign, qaPass, addComment, upload, setDue } = useStore.getState();
+  const { setStatus, assign, qaPass, addComment, upload, setDue, requestEvidence } = useStore.getState();
   const person = usePerson();
   const [tab, setTab] = useState<"comments" | "history">("comments");
   const [approveOpen, setApproveOpen] = useState(false);
@@ -368,6 +408,7 @@ export function ControlDetail({ id, onClose }: { id: string; onClose?: () => voi
               Evidence
               <span className="tnum font-normal text-muted">{evidence.length}</span>
             </h3>
+            {evidence.length > 0 && <Precheck files={evidence} clientName={client.name} contact={client.contacts[0].name} onRequest={(text) => { requestEvidence(c.id, `${c.title}: replacement evidence`, text, 7); toast.success(`Request sent to ${client.contacts[0].name}`, { description: "Drafted from the pre-check findings." }); }} />}
             <ul className="mt-2.5 space-y-1.5">
               <AnimatePresence initial={false}>
                 {evidence.map((e) => {
@@ -394,6 +435,7 @@ export function ControlDetail({ id, onClose }: { id: string; onClose?: () => voi
                           )}
                         </p>
                       </div>
+                      <AiChip e={e} />
                       <Badge tone={e.state === "accepted" ? "ok" : e.state === "rejected" ? "bad" : "warn"}>
                         {e.state === "accepted" ? "Accepted" : e.state === "rejected" ? "Rejected" : "Pending"}
                       </Badge>

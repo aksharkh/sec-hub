@@ -1,6 +1,6 @@
 import {
   BarChart3, Building2, CalendarDays, CircleAlert, ClipboardCheck, FileText, FolderOpen, GitCompareArrows, House, Inbox, Plug,
-  ScrollText, Settings, ShieldCheck, Gauge, UsersRound, Workflow,
+  ScrollText, Settings, ShieldCheck, Gauge, UsersRound, Workflow, ListChecks,
 } from "lucide-react";
 
 export type NavItem = { href: string; label: string; icon: typeof House; kbd?: string; count?: "reviews" | "gaps" | "pbc" | "risks"; badge?: string };
@@ -23,6 +23,7 @@ export const NAV_GROUPS: { id: string; label: string | null; items: NavItem[] }[
       { href: "/audits", label: "Audits", icon: ClipboardCheck, kbd: "G A", count: "pbc" },
       { href: "/evidence", label: "Evidence", icon: FolderOpen, kbd: "G E" },
       { href: "/policies", label: "Policies", icon: FileText, kbd: "G P" },
+      { href: "/questionnaires", label: "Questionnaires", icon: ListChecks, badge: "Auto" },
       { href: "/risks", label: "Risks", icon: Gauge, count: "risks" },
       { href: "/gaps", label: "Gaps", icon: CircleAlert, kbd: "G G", count: "gaps" },
     ],

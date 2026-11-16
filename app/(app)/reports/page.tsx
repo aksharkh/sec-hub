@@ -69,7 +69,7 @@ export default function ReportsPage() {
         <div className="space-y-2">
           {TEMPLATES.map((x) => (
             <button key={x.id} onClick={() => setTpl(x.id)} className={cn("flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-[border-color,background-color]", tpl === x.id ? "border-ink bg-surface shadow-sm" : "border-line hover:border-line-strong hover:bg-surface")}>
-              <span className={cn("grid size-9 shrink-0 place-items-center rounded-lg", tpl === x.id ? "bg-ink text-surface" : "bg-subtle text-muted")}><x.icon className="size-4" /></span>
+              <span className={cn("grid size-9 shrink-0 place-items-center rounded-lg", tpl === x.id ? "bg-ink text-inverse" : "bg-subtle text-muted")}><x.icon className="size-4" /></span>
               <span><span className="block text-[13.5px] font-semibold text-ink">{x.name}</span><span className="mt-0.5 block text-[12px] leading-[1.45] text-muted">{x.desc}</span></span>
             </button>
           ))}

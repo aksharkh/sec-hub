@@ -7,6 +7,7 @@ const SIZES = { xs: "size-5 text-[9px]", sm: "size-6 text-[10px]", md: "size-7 t
 export function Avatar({ person, size = "md", className, ring }: { person: Pick<Person, "name" | "hue" | "client">; size?: keyof typeof SIZES; className?: string; ring?: boolean }) {
   return (
     <span
+      data-slot="avatar"
       title={person.name}
       style={{ "--h": person.hue } as CSSProperties}
       className={cn(

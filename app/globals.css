@@ -51,6 +51,11 @@
   --shadow-panel: 0 1px 2px rgb(15 23 41 / 0.04), 0 8px 24px -12px rgb(15 23 41 / 0.1);
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --inverse: #ffffff;
+  --font-ui: var(--font-geist);
+  --font-code: var(--font-geist-mono);
+  --font-display: var(--font-geist);
+  --app-bg: none;
 }
 
 .dark {
@@ -72,6 +77,7 @@
   --brand-ink: #f5f5f5;
   --on-brand: #0a0a0a;
   --ring: rgb(255 255 255 / 0.28);
+  --inverse: #111111;
 
   --ok: #4ade80;
   --ok-soft: rgb(74 222 128 / 0.1);
@@ -101,6 +107,7 @@
 @theme inline {
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
+  --color-inverse: var(--inverse);
   --color-raised: var(--raised);
   --color-subtle: var(--subtle);
   --color-subtle-2: var(--subtle-2);
@@ -134,8 +141,8 @@
   --color-info-dot: var(--info-dot);
   --color-neutral-dot: var(--neutral-dot);
 
-  --font-sans: var(--font-geist);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-ui);
+  --font-mono: var(--font-code);
   --font-serif: var(--font-instrument);
 
   --shadow-xs: var(--shadow-xs);
@@ -188,7 +195,9 @@ html.dark { color-scheme: dark; }
 body {
   background: var(--canvas);
   color: var(--ink);
-  font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+  background-image: var(--app-bg);
+  background-attachment: fixed;
   font-size: 14px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;

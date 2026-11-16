@@ -159,7 +159,7 @@ export default function AuditDetailPage() {
                 const past = daysUntil(m.at) < 0;
                 return (
                   <li key={m.at} className="flex items-start gap-3 rounded-lg px-2 py-2.5">
-                    <span className={cn("grid size-9 shrink-0 place-items-center rounded-lg text-center leading-none", past ? "bg-subtle text-faint" : "bg-ink text-surface")}>
+                    <span className={cn("grid size-9 shrink-0 place-items-center rounded-lg text-center leading-none", past ? "bg-subtle text-faint" : "bg-ink text-inverse")}>
                       <span><span className="block text-[9.5px] font-semibold uppercase">{new Date(m.at).toLocaleDateString("en-US", { month: "short" })}</span><span className="tnum block text-[13px] font-semibold">{new Date(m.at).getDate()}</span></span>
                     </span>
                     <span className="min-w-0">
